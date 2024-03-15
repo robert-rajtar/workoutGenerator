@@ -34,8 +34,11 @@ db = ExerciseDatabase('exercises.db')
 pdf_report = PDFReport('training_plan.pdf')
 
 name = get_user_name()
+
 groups = ['Leg Exercises', 'Chest Exercises', 'Back Exercises', 'Arm Exercises']
+
 selected_exercises = select_exercises(db, groups)
+
 generate_pdf(name, selected_exercises, pdf_report)
 
 db.close()

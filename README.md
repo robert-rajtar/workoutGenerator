@@ -8,7 +8,7 @@ Requirements
 
 Installation
 --------------------------------------------
-Clone the repository: git clone https://github.com/robert-rajtar/exercise-planner.git
+Clone the repository: git clone https://github.com/robert-rajtar/workoutGenerator.git
 Install the required packages: pip install fpdf
 
 Usage

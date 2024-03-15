@@ -118,7 +118,6 @@ def generate_pdf(name, selected_exercises, pdf_report):
     pdf_report.set_font("Arial", style="", size=12)
     pdf_report.write_text(f"Exercise set for: {name}\n\n")
 
-    # Wygenerowanie tekstu dla każdego ćwiczenia
     for exercise, details in selected_exercises.items():
         text = f"Exercise: {exercise}, Series: {details['series']}, Repetitions: {details['repetitions']}\n"
         pdf_report.write_text(text)

@@ -1,15 +1,18 @@
 This project is a simple exercise planner that allows users to select exercises from different groups and generates a PDF training plan based on the user's selections.
 
-Requirements:
+Requirements
+---------------------------
  - Python 3.x
  - sqlite3
  - fpdf
 
 Installation
+--------------------------------------------
 Clone the repository: git clone https://github.com/robert-rajtar/exercise-planner.git
 Install the required packages: pip install fpdf
 
 Usage
+---------------------------------------------
 Ensure you have a SQLite database file containing exercises. The database should include a table named exercises with columns id, name, and group_name.
 Import the ExerciseDatabase and PDFReport classes into your project.
 Create an instance of ExerciseDatabase by providing the path to the database file.
@@ -33,4 +36,4 @@ selected_exercises = select_exercises(db, groups)
 generate_pdf(name, selected_exercises, pdf_report)
 
 db.close()
----------------------------------------------
+

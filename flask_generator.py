@@ -47,23 +47,16 @@ def select_exercises(db, groups):
             continue
 
         selected_exercise_ids = request.form.getlist(group)
-        selected_exercises.update(get_exercise_details(exercises, selected_exercise_ids))
+        for exercise_id in selected_exercise_ids:
+            exercise_id = int(exercise_id)
+            selected_exercise = next(exercise for exercise in exercises if exercise[0] == exercise_id)
+            series_key = f"{selected_exercise[1]}_series"
+            repetitions_key = f"{selected_exercise[1]}_repetitions"
+            series = int(request.form.get(series_key, 0))
+            repetitions = int(request.form.get(repetitions_key, 0))
+            selected_exercises[selected_exercise[1]] = {'series': series, 'repetitions': repetitions}
 
     return selected_exercises
-
-def get_exercise_details(exercises, selected_exercise_ids):
-    exercise_details = {}
-    for exercise_id in selected_exercise_ids:
-        exercise_id = int(exercise_id)
-        selected_exercise = next(exercise for exercise in exercises if exercise[0] == exercise_id)
-        series, repetitions = get_series_and_repetitions(selected_exercise[1])
-        exercise_details[selected_exercise[1]] = {'series': series, 'repetitions': repetitions}
-    return exercise_details
-
-def get_series_and_repetitions(exercise_name):
-    series = int(request.form[f"{exercise_name}_series"])
-    repetitions = int(request.form[f"{exercise_name}_repetitions"])
-    return series, repetitions
 
 def generate_pdf(name, selected_exercises, pdf_report):
     pdf_report.add_page()
@@ -90,7 +83,17 @@ def index():
         db.close()
         return redirect(url_for('index'))  # Redirect to the index page after processing the form
 
-    return render_template('index.html')
+    else:
+        # Pobranie listy grup ćwiczeń
+        db = ExerciseDatabase('exercises.db')
+        exercise_groups = {}
+        groups = ['Leg Exercises', 'Chest Exercises', 'Back Exercises', 'Arm Exercises']
+        for group in groups:
+            exercises = db.get_exercises_by_group(group)
+            exercise_groups[group] = exercises
+        db.close()
+
+        return render_template('index.html', exercise_groups=exercise_groups)
 
 if __name__ == "__main__":
     app.run(debug=True)

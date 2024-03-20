@@ -5,6 +5,7 @@ Requirements
  - Python 3.x
  - sqlite3
  - fpdf
+ - Flask
 
 Installation
 --------------------------------------------
@@ -12,7 +13,7 @@ Clone the repository:
 git clone https://github.com/robert-rajtar/workoutGenerator.git
 
 Install the required packages: 
-pip install fpdf
+pip install fpdf Flask
 
 Usage
 ---------------------------------------------
@@ -24,22 +25,22 @@ Utilize the provided functions to interact with the exercise planner:
  - get_user_name(): Prompts the user to enter the name of the person for whom the training will be designed.
  - select_exercises(db, groups): Enables the user to select exercises from predefined groups.
  - generate_pdf(name, selected_exercises, pdf_report): Generates a PDF training plan based on the user's selections.
-Execute the main() function to run the exercise planner.
+
+Run the Flask application by executing the app.py file.
+
+Access the exercise planner through a web browser.
 
 Example
 ---------------------------------------------
-from exercise_planner import ExerciseDatabase, PDFReport, get_user_name, select_exercises, generate_pdf
+from flask import Flask, render_template, request, redirect, url_for, send_file
 
-db = ExerciseDatabase('exercises.db')
-pdf_report = PDFReport('training_plan.pdf')
+import sqlite3
 
-name = get_user_name()
+from fpdf import FPDF
 
-groups = ['Leg Exercises', 'Chest Exercises', 'Back Exercises', 'Arm Exercises']
 
-selected_exercises = select_exercises(db, groups)
+if __name__ == "__main__":
 
-generate_pdf(name, selected_exercises, pdf_report)
+    app.run(debug=True)
 
-db.close()
 

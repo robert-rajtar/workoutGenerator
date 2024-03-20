@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise Planner</title>
+    <style>
+        body {
+            background: #BA8B02;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #181818, #BA8B02);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #181818, #BA8B02); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            font-family: Arial, sans-serif;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            margin-top: 50px;
+            color: #FFFFFF;
+        }
+        form {
+            color: #000000;
+            margin: 0 auto;
+            width: 80%; /* Zwiększenie szerokości formularza */
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        label {
+            display: inline-block;
+            margin-bottom: 5px;
+            color: #000000;
+            width: 200px; /* Zwiększenie szerokości etykiety ćwiczenia */
+            transition: background-color 0.3s; /* Dodanie efektu przejścia */
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="submit"],
+        input[type="checkbox"],
+        label {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="checkbox"] {
+            display: inline-block;
+            width: 20px; /* Zmniejszenie szerokości pola wyboru */
+            margin-right: 10px;
+        }
+        input[type="submit"] {
+            background-color: #8B4513;
+            color: white;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #A0522D;
+        }
+        h2 {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #BA8B02;
+        }
+
+        /* Dodanie koloru tła etykiety po zaznaczeniu checkboxa */
+        input[type="checkbox"]:checked + label {
+            background-color: #BA8B02;
+            color: #FFFFFF; /* Zmiana koloru czcionki po zaznaczeniu */
+        }
+    </style>
+</head>
+<body>
+    <h1>Exercise Planner</h1>
+    <form action="/" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        {% for group, exercises in exercise_groups.items() %}
+            <h2>{{ group }}</h2>
+            {% for exercise in exercises %}
+                <input type="checkbox" id="{{ exercise[1] }}" name="{{ group }}" value="{{ exercise[0] }}">
+                <label for="{{ exercise[1] }}">{{ exercise[1] }}</label>
+                <label for="{{ exercise[1] }}_series">Sets:</label>
+                <input type="number" id="{{ exercise[1] }}_series" name="{{ exercise[1] }}_series" min="1" value="1" required>
+                <label for="{{ exercise[1] }}_repetitions">Reps:</label>
+                <input type="number" id="{{ exercise[1] }}_repetitions" name="{{ exercise[1] }}_repetitions" min="1" value="1" required><br>
+            {% endfor %}
+        {% endfor %}
+
+        <br><br>
+        <input type="submit" value="Generate Training Plan">
+    </form>
+</body>
+</html>

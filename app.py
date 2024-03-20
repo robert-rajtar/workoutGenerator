@@ -4,6 +4,7 @@ from fpdf import FPDF
 
 app = Flask(__name__)
 
+
 class ExerciseDatabase:
     def __init__(self, db_name):
         self.conn = sqlite3.connect(db_name)
@@ -16,6 +17,7 @@ class ExerciseDatabase:
 
     def close(self):
         self.conn.close()
+
 
 class PDFReport:
     def __init__(self, file_name):
@@ -34,8 +36,10 @@ class PDFReport:
     def save(self):
         self.pdf.output(self.file_name)
 
+
 def get_user_name():
     return request.form['name']
+
 
 def select_exercises(db, groups):
     selected_exercises = {}
@@ -58,6 +62,7 @@ def select_exercises(db, groups):
 
     return selected_exercises
 
+
 def generate_pdf(name, selected_exercises, pdf_report):
     pdf_report.add_page()
     pdf_report.set_font("Arial", style="", size=12)
@@ -69,11 +74,12 @@ def generate_pdf(name, selected_exercises, pdf_report):
 
     pdf_report.save()
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         db = ExerciseDatabase('exercises.db')
-        pdf_report = PDFReport('training_plan.pdf') # Zmiana nazwy pliku PDF
+        pdf_report = PDFReport('training_plan.pdf')
 
         name = get_user_name()
         groups = ['Leg Exercises', 'Chest Exercises', 'Back Exercises', 'Arm Exercises']
@@ -81,11 +87,11 @@ def index():
         generate_pdf(name, selected_exercises, pdf_report)
 
         db.close()
-        # Przekierowanie do linku do pliku PDF
+
         return redirect(url_for('download_pdf'))
 
     else:
-        # Pobranie listy grup ćwiczeń
+        # Fetching the list of exercise groups.
         db = ExerciseDatabase('exercises.db')
         exercise_groups = {}
         groups = ['Leg Exercises', 'Chest Exercises', 'Back Exercises', 'Arm Exercises']
@@ -96,9 +102,11 @@ def index():
 
         return render_template('index.html', exercise_groups=exercise_groups)
 
+
 @app.route('/download-pdf')
 def download_pdf():
     return send_file('training_plan.pdf', as_attachment=True)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

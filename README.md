@@ -12,21 +12,13 @@ Installation
 Clone the repository: 
 git clone https://github.com/robert-rajtar/workoutGenerator.git
 
-Install the required packages: 
-pip install fpdf Flask
+Install the required packages
 
 Usage
 ---------------------------------------------
-Ensure you have a SQLite database file containing exercises. The database should include a table named exercises with columns id, name, and group_name.
-Import the ExerciseDatabase and PDFReport classes into your project.
-Create an instance of ExerciseDatabase by providing the path to the database file.
-Create an instance of PDFReport by specifying the desired PDF file name.
-Utilize the provided functions to interact with the exercise planner:
- - get_user_name(): Prompts the user to enter the name of the person for whom the training will be designed.
- - select_exercises(db, groups): Enables the user to select exercises from predefined groups.
- - generate_pdf(name, selected_exercises, pdf_report): Generates a PDF training plan based on the user's selections.
+Run the Flask application by executing the:
 
-Run the Flask application by executing the app.py file.
+python3 app.py 
 
 Access the exercise planner through a web browser.
 

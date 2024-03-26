@@ -33,6 +33,27 @@ class PDFReport:
     def write_text(self, text):
         self.pdf.cell(200, 10, txt=text, ln=True)
 
+    def add_table(self, headers, data):
+        # Set font for table headers
+        self.set_font('Arial', 'B', 12)
+        # Add headers
+        for header in headers:
+            if header == "Exercise":
+                self.pdf.cell(80, 10, header, 1, 0, 'C')
+            else:
+                self.pdf.cell(30, 10, header, 1, 0, 'C')
+        self.pdf.ln()
+        # Set font for table data
+        self.set_font('Arial', '', 12)
+        # Add data
+        for row in data:
+            for idx, item in enumerate(row):
+                if idx == 0:  # Adjusting width only for the 'Exercise' column
+                    self.pdf.cell(80, 10, str(item), 1, 0, 'C')
+                else:
+                    self.pdf.cell(30, 10, str(item), 1, 0, 'C')
+            self.pdf.ln()
+
     def save(self):
         self.pdf.output(self.file_name)
 
@@ -56,9 +77,9 @@ def select_exercises(db, groups):
             selected_exercise = next(exercise for exercise in exercises if exercise[0] == exercise_id)
             series_key = f"{selected_exercise[1]}_series"
             repetitions_key = f"{selected_exercise[1]}_repetitions"
-            series = int(request.form.get(series_key, 0))
-            repetitions = int(request.form.get(repetitions_key, 0))
-            selected_exercises[selected_exercise[1]] = {'series': series, 'repetitions': repetitions}
+            sets = int(request.form.get(series_key, 0))
+            reps = int(request.form.get(repetitions_key, 0))
+            selected_exercises[selected_exercise[1]] = {'sets': sets, 'reps': reps}
 
     return selected_exercises
 
@@ -68,10 +89,12 @@ def generate_pdf(name, selected_exercises, pdf_report):
     pdf_report.set_font("Arial", style="", size=12)
     pdf_report.write_text(f"Exercise set for: {name}\n\n")
 
+    headers = ["Exercise", "Sets", "Reps"]
+    data = []
     for exercise, details in selected_exercises.items():
-        text = f"Exercise: {exercise}, Series: {details['series']}, Repetitions: {details['repetitions']}\n"
-        pdf_report.write_text(text)
+        data.append([exercise, details['sets'], details['reps']])
 
+    pdf_report.add_table(headers, data)
     pdf_report.save()
 
 
